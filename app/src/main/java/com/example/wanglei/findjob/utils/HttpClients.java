@@ -11,6 +11,7 @@ import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.HTTP;
 
 /**
  * Created by wanglei on 18-3-21.
@@ -24,13 +25,24 @@ public class HttpClients {
     String GUOKR_HANDPICK_BASE = "http://apis.guokr.com/minisite/";
     Context mContext;
    ApiService apiService;
-    public HttpClients(Context context){
+    public HttpClients(){
 
-       mContext = context;
+       //mContext = context;
+   }
+
+   public static class SingleHolder{
+
+        public static final HttpClients single = new HttpClients();
 
 
    }
-public void getZhiDialyNews(Observer<ZhihuDialyNews>observer,long date){
+   public static HttpClients getHttpClient(){
+
+        return SingleHolder.single;
+
+   }
+
+   public void getZhiDialyNews(Observer<ZhihuDialyNews>observer,long date){
     mRetrofit = new Retrofit.Builder()
             .baseUrl(ZHIHU_DAILY_BASE)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -41,7 +53,6 @@ public void getZhiDialyNews(Observer<ZhihuDialyNews>observer,long date){
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())
                    .subscribe(observer);
-
 
     }
 }

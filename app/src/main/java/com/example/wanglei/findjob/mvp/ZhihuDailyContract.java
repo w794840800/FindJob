@@ -2,6 +2,9 @@ package com.example.wanglei.findjob.mvp;
 
 import com.example.wanglei.findjob.BasePresenter;
 import com.example.wanglei.findjob.BaseView;
+import com.example.wanglei.findjob.date.ZhihuDialyNews;
+
+import java.util.List;
 
 /**
  * Created by wanglei on 18-3-21.
@@ -20,7 +23,7 @@ public interface ZhihuDailyContract {
     interface View extends BaseView<Presenter>{
 
         //
-        void showResult();
+        void showResult(List<ZhihuDialyNews>zhihuDialyNews);
         void showError();
         void showLoading();
         void stopLoading();

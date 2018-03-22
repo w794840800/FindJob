@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<group android:id="@+id/group1">
+
+    <item android:id="@+id/timeline"
+        android:title="时间轴">
+
+    </item>
+    <item android:id="@+id/favorite"
+        android:title="收藏">
+
+    </item>
+    <item android:id="@+id/my"
+        android:title="我的"/>
+</group>
+</menu>
