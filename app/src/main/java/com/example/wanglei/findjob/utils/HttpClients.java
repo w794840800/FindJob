@@ -4,9 +4,15 @@ import android.content.Context;
 
 import com.example.wanglei.findjob.date.ZhihuDialyNews;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -42,17 +48,41 @@ public class HttpClients {
 
    }
 
-   public void getZhiDialyNews(Observer<ZhihuDialyNews>observer,long date){
+   public void getZhiDialyNews(Observer<List<ZhihuDialyNews.StoriesBean>>observer, long date){
     mRetrofit = new Retrofit.Builder()
             .baseUrl(ZHIHU_DAILY_BASE)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build();
             apiService = mRetrofit.create(ApiService.class);
-           apiService.getNews(String.valueOf(date))
+           apiService.getNews(formatZhihuDailyDateLongToString(date))
+                   .map(new Function<ZhihuDialyNews, List<ZhihuDialyNews.StoriesBean>>() {
+                       @Override
+                       public List<ZhihuDialyNews.StoriesBean> apply(ZhihuDialyNews zhihuDialyNews) throws Exception {
+                           return zhihuDialyNews.getStories();
+                       }
+                   })
+                   .doOnError(new Consumer<Throwable>() {
+                       @Override
+                       public void accept(Throwable throwable) throws Exception {
+                           //如果请求失败去SQL获取
+
+                       }
+                   })
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())
                    .subscribe(observer);
 
+    }
+    public static String formatZhihuDailyDateLongToString(long date) {
+        String sDate;
+        Date d = new Date(date + 24*60*60*1000);
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+        sDate = format.format(d);
+
+        return sDate;
+    }
+    interface DataNotLoading{
+        void dataNotLoading();
     }
 }

@@ -16,14 +16,15 @@ public interface ZhihuDailyContract {
         void loadDate();
 
         void refresh();
-        void loadMore(long date);
+        void loadMore(long date,boolean isLoadingMore);
         //void showDetail(long date);
 
     }
     interface View extends BaseView<Presenter>{
 
         //
-        void showResult(List<ZhihuDialyNews>zhihuDialyNews);
+        void  setLoadingIndicator(boolean isLoading);
+        void showResult(List<ZhihuDialyNews.StoriesBean>zhihuDialyNews);
         void showError();
         void showLoading();
         void stopLoading();

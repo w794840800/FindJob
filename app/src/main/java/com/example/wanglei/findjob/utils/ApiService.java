@@ -2,6 +2,8 @@ package com.example.wanglei.findjob.utils;
 
 import com.example.wanglei.findjob.date.ZhihuDialyNews;
 
+import java.util.List;
+
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
