@@ -1,5 +1,6 @@
 package com.example.wanglei.findjob.mvp.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -8,15 +9,19 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.wanglei.findjob.R;
 import com.example.wanglei.findjob.adapter.TImelineFragmentViewPagerAdapter;
 import com.example.wanglei.findjob.adapter.TimelineRecyclerViewAdapter;
+import com.example.wanglei.findjob.date.ContentType;
 import com.example.wanglei.findjob.date.ZhihuDialyNews;
+import com.example.wanglei.findjob.details.DetailActivity;
 import com.example.wanglei.findjob.mvp.Presenter.ZhihuDialyPresenter;
 import com.example.wanglei.findjob.mvp.ZhihuDailyContract;
 
@@ -87,6 +92,7 @@ public class ZhihuDialyFragment extends Fragment implements ZhihuDailyContract.V
         }
     }
 });
+
     }
 
     private void loadMore() {
@@ -130,7 +136,7 @@ public class ZhihuDialyFragment extends Fragment implements ZhihuDailyContract.V
 
 
     @Override
-    public void showResult(List<ZhihuDialyNews.StoriesBean> zhihuDialyNews) {
+    public void showResult(final List<ZhihuDialyNews.StoriesBean> zhihuDialyNews) {
         Log.d(TAG, "showResult: size= "+zhihuDialyNews.size());
         size = zhihuDialyNews.size();
         mEmptyView.setVisibility((zhihuDialyNews.size()!=0)?View.INVISIBLE:View.VISIBLE);
@@ -141,6 +147,23 @@ public class ZhihuDialyFragment extends Fragment implements ZhihuDailyContract.V
                     (ArrayList<ZhihuDialyNews.StoriesBean>) zhihuDialyNews);
 
             mRecyclerView.setAdapter(timelineRecyclerViewAdapter);
+
+            timelineRecyclerViewAdapter.setOnRecyclerItemClick(new TimelineRecyclerViewAdapter.OnRecyclerItemClick() {
+                @Override
+                public void onItemClick(View v, int position) {
+                    Toast.makeText(getActivity(),"position= "+position
+                    ,Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getActivity(), DetailActivity.class);
+                    intent.putExtra(DetailActivity.KEY_ID,zhihuDialyNews.get(position)
+                    .getId());
+                    intent.putExtra(DetailActivity.TITLE,zhihuDialyNews.get(position)
+                    .getTitle());
+                    intent.putExtra(DetailActivity.TYPE, ContentType.TYPE_ZHIHU);
+                    getActivity().startActivity(intent);
+
+                }
+            });
+
         }else {
             timelineRecyclerViewAdapter.update(zhihuDialyNews);
 

@@ -9,10 +9,10 @@ import com.example.wanglei.findjob.BaseView;
 
 public interface DetailsConstract {
 
-    interface View extends BaseView{
-
+    interface View extends BaseView<Presenter>{
+    //void Show
     }
     interface Presenter extends BasePresenter{
-
+    void loadContent(int id);
     }
 }

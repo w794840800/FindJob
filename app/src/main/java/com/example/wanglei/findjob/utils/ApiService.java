@@ -1,5 +1,6 @@
 package com.example.wanglei.findjob.utils;
 
+import com.example.wanglei.findjob.date.ZhihuContent;
 import com.example.wanglei.findjob.date.ZhihuDialyNews;
 
 import java.util.List;
@@ -20,6 +21,9 @@ public interface ApiService {
     String GUOKR_HANDPICK_BASE = "http://apis.guokr.com/minisite/";
     @GET("before/{date}")
     Observable<ZhihuDialyNews>getNews(@Path("date")String date);
-
-
+    @GET("news/{id}")
+    Observable<ZhihuContent>getContent(@Path("id")int id);
 }
+
+
+

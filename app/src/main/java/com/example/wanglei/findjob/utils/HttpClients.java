@@ -2,6 +2,7 @@ package com.example.wanglei.findjob.utils;
 
 import android.content.Context;
 
+import com.example.wanglei.findjob.date.ZhihuContent;
 import com.example.wanglei.findjob.date.ZhihuDialyNews;
 
 import java.text.SimpleDateFormat;
@@ -10,6 +11,7 @@ import java.util.List;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
@@ -72,6 +74,40 @@ public class HttpClients {
                    .subscribeOn(Schedulers.io())
                    .observeOn(AndroidSchedulers.mainThread())
                    .subscribe(observer);
+
+    }
+
+
+
+
+    public void getZhiHuContent(Observer<ZhihuContent>observer, int id){
+        mRetrofit = new Retrofit.Builder()
+                .baseUrl(ZHIHU_DAILY_BASE)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        apiService = mRetrofit.create(ApiService.class);
+        apiService.getContent(id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(observer);
+        /*apiService.getNews(formatZhihuDailyDateLongToString(date))
+                .map(new Function<ZhihuDialyNews, List<ZhihuDialyNews.StoriesBean>>() {
+                    @Override
+                    public List<ZhihuDialyNews.StoriesBean> apply(ZhihuDialyNews zhihuDialyNews) throws Exception {
+                        return zhihuDialyNews.getStories();
+                    }
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        //如果请求失败去SQL获取
+
+                    }
+                })
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())*/
+                //.subscribe(observer);
 
     }
     public static String formatZhihuDailyDateLongToString(long date) {
